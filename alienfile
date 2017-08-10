@@ -1,0 +1,22 @@
+use alienfile;
+
+plugin 'PkgConfig' => 'libfontforge';
+
+# https://fontforge.github.io/
+share {
+	plugin Download => (
+		url => 'https://github.com/fontforge/fontforge/releases',
+		version => qr/(\d{4}\d{2}\d{2})\.tar\.gz/,
+	);
+
+	plugin 'Extract::CommandLine' => 'tar.gz';
+
+	plugin 'Build::Autoconf' => ();
+
+	build [
+		[ './bootstrap' ],
+		[ '%{configure} --disable-programs' ],
+		[ '%{make}' ],
+		[ '%{make}', 'install' ],
+	]
+};
