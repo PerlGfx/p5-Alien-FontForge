@@ -13,7 +13,18 @@ native:
       - libcairo2-dev
   macos-homebrew:
     packages:
+      - pkg-config
+      - libtool
+      - gettext
+      - pango
       - cairo
+      - fontconfig
+      - libpng
+      - jpeg
+      - libtiff
+      - giflib
+      - libspiro
+      - libuninameslist
   msys2-mingw64:
     packages:
       - mingw-w64-x86_64-cairo
