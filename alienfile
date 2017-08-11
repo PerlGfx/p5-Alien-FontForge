@@ -20,7 +20,7 @@ share {
 	plugin 'Build::Autoconf' => ();
 
 	build [
-		[ './bootstrap' ],
+		[ 'sh ./bootstrap' ],
 		[ '%{configure}'
 			. ' ' . join(' ',
 				qw(--disable-programs
