@@ -2,7 +2,15 @@ native:
   debian:
     packages:
       - pkg-config
-      - libcairo2
+      - libjpeg-dev
+      - libtiff4-dev
+      - libpng12-dev
+      - libfreetype6-dev
+      - libgif-dev
+      - libx11-dev
+      - libxml2-dev
+      - libpango1.0-dev
+      - libcairo2-dev
   macos-homebrew:
     packages:
       - cairo
