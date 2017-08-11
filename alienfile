@@ -19,7 +19,9 @@ share {
 			. ' ' . join(' ',
 				qw(--disable-programs
 				--disable-python-scripting
-				--disable-python-extension)
+				--disable-python-extension
+				--without-x
+				)
 			)
 		],
 		[ '%{make}' ],
