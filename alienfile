@@ -15,7 +15,13 @@ share {
 
 	build [
 		[ './bootstrap' ],
-		[ '%{configure} --disable-programs' ],
+		[ '%{configure}'
+			. ' ' . join(' ',
+				qw(--disable-programs
+				--disable-python-scripting
+				--disable-python-extension)
+			)
+		],
 		[ '%{make}' ],
 		[ '%{make}', 'install' ],
 	]
