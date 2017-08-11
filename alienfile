@@ -2,8 +2,6 @@ use alienfile;
 
 plugin 'PkgConfig' => 'libfontforge';
 
-requires 'Alien::Poppler';
-
 # https://fontforge.github.io/
 share {
 	plugin Download => (
@@ -12,10 +10,6 @@ share {
 	);
 
 	plugin 'Extract::CommandLine' => 'tar.gz';
-
-	plugin 'Build::SearchDep' => (
-		aliens => [ qw( Alien::Poppler ) ],
-	);
 
 	plugin 'Build::Autoconf' => ();
 
