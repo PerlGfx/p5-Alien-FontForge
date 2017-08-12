@@ -7,8 +7,8 @@ use Alien::FontForge;
 subtest 'FontForge version' => sub {
 	alien_ok 'Alien::FontForge';
 
-	use Env qw(@DYLD_FALLBACK_LIBRARY_PATH);
-	unshift @DYLD_FALLBACK_LIBRARY_PATH, Alien::FontForge->rpath;
+	use DynaLoader;
+	unshift @DynaLoader::dl_library_path, Alien::FontForge->rpath;
 
 	my $xs = do { local $/; <DATA> };
 	xs_ok $xs, with_subtest {
