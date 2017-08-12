@@ -42,7 +42,7 @@ matrix:
   allow_failures:
     - perl: blead       # ignore failures for blead perl
 before_install:
-  - export DEVOPS_BRANCH="master"
+  - export DEVOPS_BRANCH="46-brew-skip-fontconfig-cache"
   - >
     if [ "$TRAVIS_OS_NAME" = "osx" ]; then
             export PATH="/usr/local/opt/gettext/bin:$PATH";
