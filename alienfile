@@ -2,6 +2,8 @@ use alienfile;
 
 plugin 'PkgConfig' => 'libfontforge';
 
+requires 'Alien::Build::Plugin::Gather::Dino';
+
 # https://fontforge.github.io/
 share {
 	# Use .zip on Windows' MSYS2 because of extraction issues with bsdtar under MSYS2
