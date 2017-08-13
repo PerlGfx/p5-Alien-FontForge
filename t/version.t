@@ -11,11 +11,24 @@ subtest 'FontForge version' => sub {
 	unshift @DynaLoader::dl_library_path, Alien::FontForge->rpath;
 
 	my $xs = do { local $/; <DATA> };
-	xs_ok $xs, with_subtest {
+	xs_ok {
+		xs => $xs,
+		verbose => 0,
+		cbuilder_link => {
+			extra_linker_flags =>
+				# add -dylib_file since during test, the dylib is under blib/
+				$^O eq 'darwin'
+					? ' -dylib_file ' . join ":", map {
+						"$_/lib/libfontforge.2.dylib"
+					} (@{Alien::FontForge->runtime_prop}{qw(prefix distdir)}),
+					: ' '
+		},
+	}, with_subtest {
 		my($module) = @_;
 		is $module->version, Alien::FontForge->version,
 			"Got FontForge version @{[ Alien::FontForge->version ]}";
 	};
+
 };
 
 done_testing;
