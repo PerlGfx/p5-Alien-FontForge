@@ -7,7 +7,15 @@ cache:
 addons:
   apt:
     packages:
-      - libcairo2
+      - libjpeg-dev
+      - libtiff4-dev
+      - libpng12-dev
+      - libfreetype6-dev
+      - libgif-dev
+      - libx11-dev
+      - libxml2-dev
+      - libpango1.0-dev
+      - libcairo2-dev
       - aspell     # for dzil Test::PodSpelling
       - aspell-en  # for dzil Test::PodSpelling
 matrix:

@@ -2,21 +2,39 @@ use alienfile;
 
 plugin 'PkgConfig' => 'libfontforge';
 
+requires 'Alien::Build::Plugin::Gather::Dino';
+
 # https://fontforge.github.io/
 share {
+	# Use .zip on Windows' MSYS2 because of extraction issues with bsdtar under MSYS2
+	my $ext = exists $ENV{MSYSTEM} ? 'zip' : 'tar.gz';
 	plugin Download => (
 		url => 'https://github.com/fontforge/fontforge/releases',
-		version => qr/(\d{4}\d{2}\d{2})\.tar\.gz/,
+		version => qr/(\d{4}\d{2}\d{2})\.\Q$ext\E/,
 	);
 
-	plugin 'Extract::CommandLine' => 'tar.gz';
+	if ( exists $ENV{MSYSTEM} ) {
+		plugin 'Extract' => $ext;
+	} else {
+		plugin 'Extract::CommandLine' => $ext;
+	}
 
 	plugin 'Build::Autoconf' => ();
 
 	build [
-		[ './bootstrap' ],
-		[ '%{configure} --disable-programs' ],
+		[ 'sh ./bootstrap' ],
+		[ '%{configure}'
+			. ' ' . join(' ',
+				qw(--disable-programs
+				--disable-python-scripting
+				--disable-python-extension
+				--without-x
+				)
+			)
+		],
 		[ '%{make}' ],
 		[ '%{make}', 'install' ],
-	]
+	];
+
+	plugin 'Gather::Dino';
 };
