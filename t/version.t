@@ -7,9 +7,6 @@ use Alien::FontForge;
 subtest 'FontForge version' => sub {
 	alien_ok 'Alien::FontForge';
 
-	use DynaLoader;
-	unshift @DynaLoader::dl_library_path, Alien::FontForge->rpath;
-
 	my $xs = do { local $/; <DATA> };
 	xs_ok {
 		xs => $xs,
