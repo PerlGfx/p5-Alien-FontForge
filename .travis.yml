@@ -43,8 +43,4 @@ matrix:
     - perl: blead       # ignore failures for blead perl
 before_install:
   - export DEVOPS_BRANCH="46-brew-skip-fontconfig-cache"
-  - >
-    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-            export DYLD_FALLBACK_LIBRARY_PATH="blib/lib/auto/share/dist/Alien-FontForge/lib"
-    fi
   - eval "$(curl https://raw.githubusercontent.com/project-renard/devops/$DEVOPS_BRANCH/script/helper.pl | perl -- | awk '/^#START/,/^#END/ { print > "/dev/stdout"; next } { print > "/dev/stderr"}' )"
