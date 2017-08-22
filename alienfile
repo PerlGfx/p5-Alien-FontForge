@@ -5,6 +5,9 @@ plugin 'PkgConfig' => 'libfontforge';
 requires 'Alien::Build::Plugin::Gather::Dino';
 requires 'Path::Tiny' => 0;
 use Env qw(@ACLOCAL_PATH);
+if ( exists $ENV{MSYSTEM} ) {
+	requires 'Archive::Zip'; # for Extract::ArchiveZip
+}
 
 # https://fontforge.github.io/
 share {
@@ -16,7 +19,7 @@ share {
 	);
 
 	if ( exists $ENV{MSYSTEM} ) {
-		plugin 'Extract' => $ext;
+		plugin 'Extract::ArchiveZip' => $ext;
 	} else {
 		plugin 'Extract::CommandLine' => $ext;
 	}
