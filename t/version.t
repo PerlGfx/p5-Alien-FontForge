@@ -37,9 +37,6 @@ __DATA__
 
 #undef _
 
-#include <locale.h>
-#include <xlocale.h>
-
 #include "fontforge.h"
 
 const char *
