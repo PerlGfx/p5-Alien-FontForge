@@ -17,3 +17,9 @@ sub pkg_config_path {
 }
 
 1;
+__END__
+=head1 SEE ALSO
+
+L<FontForge|http://fontforge.github.io/>
+
+L<Repository information|http://project-renard.github.io/doc/development/repo/p5-Alien-FontForge/>
