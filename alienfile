@@ -22,7 +22,7 @@ share {
 
 	patch sub {
 		my($splinefont_h) = Path::Tiny->new('fontforge/splinefont.h');
-		
+
 		$splinefont_h->edit_lines(sub {
 			s{\Q#include "locale.h"\E}{#include <locale.h>\n#include <xlocale.h>\n}g;
 		});
