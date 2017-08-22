@@ -30,3 +30,4 @@ native:
   msys2-mingw64:
     packages:
       - mingw-w64-x86_64-cairo
+      - mingw-w64-x86_64-libxml2
