@@ -4,6 +4,7 @@ plugin 'PkgConfig' => 'libfontforge';
 
 requires 'Alien::Build::Plugin::Gather::Dino';
 requires 'Path::Tiny' => 0;
+use Env qw(@ACLOCAL_PATH);
 
 # https://fontforge.github.io/
 share {
@@ -29,6 +30,17 @@ share {
 	};
 
 	plugin 'Build::Autoconf' => ();
+
+
+	if( exists $ENV{MSYSTEM} ) {
+		# Need for call to `autoreconf` in `./bootstrap`.
+		# Taken from <https://github.com/jtanx/fontforgebuilds/blob/master/ffbuild.sh>.
+		push @ACLOCAL_PATH,
+			(
+				'm4',
+				"/@{[ lc $ENV{MSYSTEM} ]}/share/aclocal"
+			);
+	}
 
 	build [
 		[ 'sh ./bootstrap' ],
