@@ -2,6 +2,7 @@ native:
   debian:
     packages:
       - pkg-config
+      - gettext
       - libjpeg-dev
       - libtiff4-dev
       - libpng12-dev
