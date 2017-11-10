@@ -47,31 +47,6 @@ share {
 			);
 	}
 
-	my @install_name_tool_commands = ();
-	if( $^O eq 'darwin' ) {
-		my @libs = qw(
-			lib/libfontforge.2.dylib
-			lib/libfontforgeexe.2.dylib lib/libgioftp.2.dylib
-			lib/libgunicode.4.dylib
-			lib/libgutils.2.dylib
-		);
-
-		for my $lib (@libs) {
-			my $rpath_install = '%{.runtime.prefix}';
-			my $rpath_blib = '%{.install.stage}';
-			my $blib_lib = "$rpath_blib/$lib";
-
-			push @install_name_tool_commands,
-				"install_name_tool -add_rpath $rpath_install -add_rpath $rpath_blib $blib_lib";
-			push @install_name_tool_commands,
-				"install_name_tool -id \@rpath/$lib $blib_lib";
-			for my $other_lib (@libs) {
-				push @install_name_tool_commands,
-					"install_name_tool -change $rpath_install/$other_lib \@rpath/$other_lib $blib_lib"
-			}
-		}
-	}
-
 	build [
 		[ 'sh ./bootstrap' ],
 		[ '%{configure}'
@@ -85,7 +60,6 @@ share {
 		],
 		[ '%{make}' ],
 		[ '%{make}', 'install' ],
-		@install_name_tool_commands
 	];
 
 	plugin 'Gather::Dino';
