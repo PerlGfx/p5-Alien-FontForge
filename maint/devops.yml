@@ -2,6 +2,13 @@ native:
   debian:
     packages:
       - pkg-config
+      - autoconf
+      - automake
+      - autotools-dev
+      - libtool
+      - git
+      - bzip2
+      - tar
       - gettext
       - libjpeg-dev
       - libtiff4-dev
