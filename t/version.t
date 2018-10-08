@@ -7,6 +7,35 @@ use Alien::FontForge;
 subtest 'FontForge version' => sub {
 	alien_ok 'Alien::FontForge';
 
+	if( $^O eq 'darwin' ) {
+		my @install_name_tool_commands = ();
+		my @libs = qw(
+			lib/libfontforge.2.dylib
+			lib/libfontforgeexe.2.dylib lib/libgioftp.2.dylib
+			lib/libgunicode.4.dylib
+			lib/libgutils.2.dylib
+		);
+
+		for my $lib (@libs) {
+			my $prop = Alien::FontForge->runtime_prop;
+			my $rpath_install = $prop->{prefix}; # '%{.runtime.prefix}'
+			my $rpath_blib = $prop->{distdir}; # '%{.install.stage}';
+			my $blib_lib = "$rpath_blib/$lib";
+
+			push @install_name_tool_commands,
+				"install_name_tool -add_rpath $rpath_install -add_rpath $rpath_blib $blib_lib";
+			push @install_name_tool_commands,
+				"install_name_tool -id \@rpath/$lib $blib_lib";
+			for my $other_lib (@libs) {
+				push @install_name_tool_commands,
+					"install_name_tool -change $rpath_install/$other_lib \@rpath/$other_lib $blib_lib"
+			}
+		}
+		for my $command (@install_name_tool_commands) {
+			system($command);
+		}
+	}
+
 	my $xs = do { local $/; <DATA> };
 	xs_ok {
 		xs => $xs,
@@ -15,9 +44,7 @@ subtest 'FontForge version' => sub {
 			extra_linker_flags =>
 				# add -dylib_file since during test, the dylib is under blib/
 				$^O eq 'darwin'
-					? ' -dylib_file ' . join ":", map {
-						"$_/lib/libfontforge.2.dylib"
-					} (@{Alien::FontForge->runtime_prop}{qw(prefix distdir)}),
+					? ' -rpath ' . Alien::FontForge->runtime_prop->{distdir}
 					: ' '
 		},
 	}, with_subtest {
