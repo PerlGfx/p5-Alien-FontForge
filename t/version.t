@@ -7,6 +7,14 @@ use Alien::FontForge;
 subtest 'FontForge version' => sub {
 	alien_ok 'Alien::FontForge';
 
+	use DynaLoader;
+	unshift @DynaLoader::dl_library_path, Alien::FontForge->rpath;
+	# load shared object dependencies
+	for my $lib ( qw(-lgunicode -lgutils -lgioftp) ) {
+		my @files = DynaLoader::dl_findfile($lib);
+		DynaLoader::dl_load_file($files[0]) if @files;
+	}
+
 	if( $^O eq 'darwin' ) {
 		my @install_name_tool_commands = ();
 		my @libs = qw(

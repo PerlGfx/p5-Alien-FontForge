@@ -48,7 +48,12 @@ share {
 	}
 
 	build [
-		[ 'sh ./bootstrap' ],
+		sub{
+			# clear PERL5LIB so that system Perl runs properly
+			local $ENV{PERL5LIB} = "";
+			my $exit = system(qw(sh ./bootstrap));
+			die "Non-zero exit" if $exit != 0;
+		},
 		[ '%{configure}'
 			. ' ' . join(' ',
 				qw(--disable-programs
