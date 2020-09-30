@@ -12,10 +12,10 @@ if ( exists $ENV{MSYSTEM} ) {
 # https://fontforge.github.io/
 share {
 	# Use .zip on Windows' MSYS2 because of extraction issues with bsdtar under MSYS2
-	my $ext = exists $ENV{MSYSTEM} ? 'zip' : 'tar.gz';
+	my $ext = exists $ENV{MSYSTEM} ? qr/zip/ : qr/tar.[gx]z/;
 	plugin Download => (
 		url => 'https://github.com/fontforge/fontforge/releases',
-		version => qr/(\d{4}\d{2}\d{2})\.\Q$ext\E/,
+		version => qr/(\d{4}\d{2}\d{2})\.$ext/,
 	);
 
 	if ( exists $ENV{MSYSTEM} ) {
