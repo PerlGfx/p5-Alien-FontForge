@@ -3,8 +3,8 @@ use alienfile;
 plugin 'PkgConfig' => 'libfontforge';
 
 requires 'Alien::Build::Plugin::Gather::Dino';
+requires 'Alien::gmake';
 requires 'Path::Tiny' => 0;
-use Env qw(@ACLOCAL_PATH);
 if ( exists $ENV{MSYSTEM} ) {
 	requires 'Archive::Zip'; # for Extract::ArchiveZip
 }
@@ -34,37 +34,18 @@ share {
 		}
 	};
 
-	plugin 'Build::Autoconf' => ();
-
-
-	if( exists $ENV{MSYSTEM} ) {
-		# Need for call to `autoreconf` in `./bootstrap`.
-		# Taken from <https://github.com/jtanx/fontforgebuilds/blob/master/ffbuild.sh>.
-		push @ACLOCAL_PATH,
-			(
-				'm4',
-				"/@{[ lc $ENV{MSYSTEM} ]}/share/aclocal"
-			);
-	}
-
 	build [
-		sub{
-			# clear PERL5LIB so that system Perl runs properly
-			local $ENV{PERL5LIB} = "";
-			my $exit = system(qw(sh ./bootstrap));
-			die "Non-zero exit" if $exit != 0;
-		},
-		[ '%{configure}'
-			. ' ' . join(' ',
-				qw(--disable-programs
-				--disable-python-scripting
-				--disable-python-extension
-				--without-x
-				)
-			)
-		],
-		[ '%{make}' ],
-		[ '%{make}', 'install' ],
+		[ 'cmake', qw(-G), 'Unix Makefiles',
+			'-DCMAKE_INSTALL_PREFIX:PATH=%{.install.prefix}',
+			'-DENABLE_GUI=OFF',
+			'-DENABLE_PYTHON_SCRIPTING=OFF',
+			'-DENABLE_PYTHON_EXTENSION=OFF',
+			'-DENABLE_DOCS=OFF',
+			'-S', '.',
+			'-B', 'build',
+			],
+		[ '%{gmake}', '-C', 'build' ],
+		[ '%{gmake}', '-C', 'build', 'install' ],
 	];
 
 	plugin 'Gather::Dino';
